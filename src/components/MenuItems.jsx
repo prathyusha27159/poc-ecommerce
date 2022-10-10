@@ -1,53 +1,40 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchCategory } from "../store/actions/index";
+import React from "react";
+// import { useDispatch, useSelector } from "react-redux";
+// import { fetchCategory } from "../store/actions/index";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-// import { Link } from "react-router-dom";
-
-const MenuItems = ({onAllCategory}) => {
-    const menuList = useSelector((state) => state.menuReducer.menus);
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(fetchCategory());
-    }, [dispatch]);
+import {  Link } from "react-router-dom";
+import useMenu from "../custom-hooks/useMenu.jsx";
 
 
-
+const MenuItems = () => {
+    
+    const [onAllCategory, menuList] = useMenu();
+    
     return (
         <div className="category_list">
             <nav>
                 <ul>
+                    <li><Link to="/">All</Link></li>
                     {menuList && menuList.map((item, index) => {
+                        console.log("item", item);
                         return (
-                            <li  key={index}>
-                                <Link  onClick={onAllCategory}>
+                            <li key={index}>
+                                <Link to={`/category/${item}`} onClick={(e) => onAllCategory(e.target.innerText)}>
                                     {item}
                                 </Link>
                             </li>
+
+
                         );
                     })}
                 </ul>
-                {/* <select onChange={(e) =>onAllCategory(e.target.value)}>
-                    <option>All</option>
-                    
-                    {menuList.map((item, index) => {
-                        return (
-                            <option key={index}>
-                                {item}
-                            </option>
-                        );
-                    })}
-                    
-                </select> */}
             </nav>
-        </div>
+        </div >
     );
 };
 
 MenuItems.propTypes = {
-    onAllCategory:PropTypes.func
+    onAllCategory: PropTypes.func
 };
 
 

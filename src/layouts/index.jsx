@@ -4,6 +4,7 @@ import Header from "./Header.jsx";
 import "../assests/styles/footerStyle.scss";
 import "../assests/styles/headerStyle.scss";
 import "../assests/styles/productDeteil.scss";
+import "../assests/styles/categoryPage.scss";
 import PropTypes from "prop-types";
 
 

@@ -1,5 +1,7 @@
-import { USER_ADDED, GET_PRODUCTS, MENU_LIST, SINGLE_PRODUCT } from "../../store/actions/Types.js";
+import { GET_PRODUCTS, MENU_LIST, SPECIAL_PRODUCT, SINGLE_PRODUCT} from "../../store/actions/Types.js";
 import ServicesApi from "../../services/ServicesApi.js";
+
+
 
 /// menu items
 export function fetchUserRequestGet(category) {
@@ -44,36 +46,44 @@ export function fetchProducts() {
 
     };
 }
-
-
-
-
-
-export const userAdded = (user) => {
-    return {
-        type: USER_ADDED,
-        payload: user
-    };
-};
-
-//  specific products
+//  special products
 
 export const categoryType = (categorie) => {
     return {
-        type: SINGLE_PRODUCT,
+        type: SPECIAL_PRODUCT,
         payload: categorie
     };
 };
 
 export function fetchCategoryList(cat) {
-
     return (dispatch) => {
         ServicesApi.getSpecProducts(cat)
+            .then(response => {
+                dispatch(categoryType(response.data));
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    };
+}
+
+//// single product /////
+
+export const singleProductType = (onecategory) => {
+    return {
+        type: SINGLE_PRODUCT,
+        payload: onecategory
+    };
+};
+
+export function fetchSingleProductCategory(id) {
+
+    return (dispatch) => {
+        ServicesApi.getSingleProduct(id)
 
             .then(response => {
 
-                dispatch(categoryType(response.data));
-                console.log("cat", response);
+                dispatch(singleProductType(response.data));
             })
             .catch(error => {
                 console.log(error);
@@ -81,3 +91,24 @@ export function fetchCategoryList(cat) {
 
     };
 }
+
+
+/// add item from cart/////
+export const addCart = (product) => {
+    return {
+        type: "ADDITEM",
+        payload: product
+    };
+};
+
+
+// For Delete Item From Cart
+export const delCart = (product) => {
+    return {
+        type: "DELITEM",
+        payload: product
+    };
+};
+
+
+

@@ -1,34 +1,14 @@
-// import { GET_PRODUCTS, USER_ADDED, MENU_LIST } from "../../store/actions/Types.js";
 import * as actionTypes from "../actions/Types.js";
-
-const initialState = {
-    addUser: [
-        { username: "Bob", email: "admin@gmail.com", password: "admin" },
-        { username: "Bob1", email: "admin1@gmail.com", password: "admin1" },
-    ],
-};
-
-const rootReducer = (state = initialState, action) => {
-    switch (action.type) {
-    case actionTypes.USER_ADDED:
-        console.log(state);
-        return {
-            addUser: action.payload,
-        };
-    default:
-        return state;
-    }
-};
 
 const initialMenuItemState = {
     menus: [],
-    menu:{}
+    menu: {}
 };
 
 const menuReducer = (state = initialMenuItemState, action) => {
     switch (action.type) {
     case actionTypes.MENU_LIST:
-        return{
+        return {
             ...state,
             menus: action.payload,
         };
@@ -36,29 +16,13 @@ const menuReducer = (state = initialMenuItemState, action) => {
         return state;
     }
 };
-
-// const initialCategoryState = {
-//     categories: [],
-//     categorie:{}
-// };
-
-// const categorieReducer = (state = initialCategoryState, action) => {
-//     switch (action.type) {       
-//     case actionTypes.SINGLE_PRODUCT:
-//         return{
-//             ...state,
-//             categories: action.payload,
-//         };
-//     default:
-//         return state;
-//     }
-// };
-
 const initialProductState = {
     products: [],
     product: {},
+    menuateorie: [],
+    search: [],
+    searchText: "",
 };
-
 const productReducer = (state = initialProductState, action) => {
     switch (action.type) {
     case actionTypes.GET_PRODUCTS:
@@ -66,19 +30,75 @@ const productReducer = (state = initialProductState, action) => {
             ...state,
             products: action.payload,
         };
-    case actionTypes.SINGLE_PRODUCT:
+    case actionTypes.SPECIAL_PRODUCT:
         return {
             ...state,
-            products: action.payload,
+            menuateorie: action.payload,
         };
-
-
     default:
         return state;
     }
 };
 
-export { rootReducer, productReducer, menuReducer };
+
+const initialSingleProductCategoryState = {
+    singlecategories: [],
+    singlecategorie: {}
+};
+
+const singleProductCategorieReducer = (state = initialSingleProductCategoryState, action) => {
+    switch (action.type) {
+    case actionTypes.SINGLE_PRODUCT:
+        return {
+            ...state,
+            singlecategories: action.payload,
+        };
+    default:
+        return state;
+    }
+};
+
+const cart = [];
+
+const handleCart = (state = cart, action) => {
+    const product = action.payload;
+    switch (action.type) {
+    case "ADDITEM": {
+        // Check if Product is Already Exist
+        const exist = state.find((x) => x.id === product.id);
+        if (exist) {
+            // Increase the Quantity
+            return state.map((x) =>
+                x.id === product.id ? { ...x, qty: x.qty + 1 } : x,
+            );
+        } else {
+            const product = action.payload;
+            return [
+                ...state,
+                {
+                    ...product,
+                    qty: 1,
+                }
+            ];
+        }
+    }
+    case "DELITEM":
+    {
+        const exist1 = state.find((x) => x.id === product.id);
+        if (exist1.qty === 1) {
+            return state.filter((x) => x.id !== exist1.id);
+        } else {
+            return state.map((x) =>
+                x.id === product.id ? { ...x, qty: x.qty - 1 } : x
+            );
+        }
+    }
+    default:
+        return state;
+    }
+
+};
+export { productReducer, menuReducer, singleProductCategorieReducer, handleCart };
 
 
 
