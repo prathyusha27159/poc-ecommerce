@@ -10,17 +10,17 @@ const FilterData = () => {
     const productData = useSelector((state) => state.productReducer.products);
 
     const location = useLocation();
-   
+
     const search = location?.state?.search;
-     
+
     const bySearch = (user, search) => {
         if (search) {
             return (user.title.toLowerCase().includes(search.toLowerCase()) ||
-            user.category.toLowerCase().includes(search.toLowerCase())
+                user.category.toLowerCase().includes(search.toLowerCase())
             );
         } else return user;
     };
-    
+
     const filteredList = (users, search) => {
         return users
             // .filter(user => byCategory(user, category))
@@ -29,11 +29,11 @@ const FilterData = () => {
     return (
         <div className="products">
             <div className="container">
-                <div className="row">      
+                <div className="row">
                     {filteredList(productData, search).map(item => (
                         <div className="col-md-3 mt-4" key={item.id}>
                             <div className="product_text">
-                                <Link to={`/single/${item.id}`}  className="product_link">
+                                <Link to={`/single/${item.id}`} className="product_link">
                                     <h2 className="product_title">{item.title}</h2>
                                     {/* <p>{item.description}</p>  */}
                                     <p>{item.category}</p>
@@ -46,11 +46,11 @@ const FilterData = () => {
                                         <AiOutlineStar />
                                         {item.rating.rate}
                                     </p>
-                                                Count: <span>{item.rating.count}</span>
+                                    Count: <span>{item.rating.count}</span>
                                 </Link>
                             </div>
-                        </div>    
-                    ))}                  
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>

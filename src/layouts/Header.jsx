@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import amazonlogo from "../assests/images/amazon-logo-transparent.png";
 import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -11,13 +11,19 @@ import { useSelector } from "react-redux";
 import Seach from "../components/Seach.jsx";
 
 const Header = () => {
-
+    const [CartCounter, setCartCounter] = useState();
     const handleShow = () => setShow(true);
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
 
-
     const state = useSelector((state) => state.handleCart);
+    useEffect(() => {
+        let cartCount = 0;
+        state.forEach((item) => {
+            cartCount += item.qty;
+        });
+        setCartCounter(cartCount);
+    }, [state]);
 
     const navigate = useNavigate();
 
@@ -26,63 +32,66 @@ const Header = () => {
     return (
         <>
             <Navbar collapseOnSelect expand="lg" variant="dark" className="logo_maincontainer">
+                <Navbar.Brand >
+                    <div className="logo">
+                        <Link to="/">
+                            {" "}
+                            <img src={amazonlogo} alt="" />
+                        </Link>
+                    </div>
+                    <div className="sign_btn">
+                        {
+                            user ? (
+                                <>
+                                    <button type="button" onClick={handleShow}>
+                                        <p>Hello , {user} </p>
+                                    </button>
+                                </>
+                            ) :
+                                <>
+                                    <button type="button" onClick={handleShow}>
+                                        <p>Hello , sign in <AiFillCaretDown /></p>
+                                    </button>
+                                </>
+                        }
+                    </div>
+                    <div className="cart_btn">
+                        <button type="button" onClick={() => navigate("/cart")}>
+                            <BsCart className="cart_logo" />
+                            <span>Cart</span>{(CartCounter)}
+                        </button>
+                    </div>
+                </Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
                         <div >
                             <div className="flex-container">
                                 <div className="flex-item-left">
-                                    <div className="logo">
-                                        <Link to="/">
-                                            {" "}
-                                            <img src={amazonlogo} alt="" />
-                                        </Link>
-                                    </div>
                                 </div>
                                 <div className="search">
                                     <form>
                                         <div className="flex-container">
                                             <div>
                                                 {/* <select onChange={(e) => onAllCategory(e.target.value)} className="select_box">
-                                        <option>All</option>
+                                                    <option>All</option>
 
-                                        {menuList.map((item, index) => {
-                                            return (
-                                                <option key={index}>
-                                                    {item}
-                                                </option>
-                                            );
-                                        })}
+                                                    {menuList.map((item, index) => {
+                                                        return (
+                                                            <option key={index}>
+                                                                {item}
+                                                            </option>
+                                                        );
+                                                    })}
 
-                                    </select> */}
+                                                </select> */}
 
                                             </div>
                                             <Seach />
                                         </div>
                                     </form>
                                 </div>
-                                <div className="sign_btn">
-                                    {
-                                        user ? (
-                                            <>
-                                                <button type="button" onClick={handleShow}>
-                                                    <p>Hello , {user} </p>
-                                                </button>
-                                            </>
-                                        ) :
-                                            <>
-                                                <button type="button" onClick={handleShow}>
-                                                    <p>Hello , sign in <AiFillCaretDown /></p>
-                                                </button>
-                                            </>
-                                    }
-                                </div>
-                                <div className="cart_btn">
-                                    <button type="button" onClick={() => navigate("/cart")}>
-                                        <BsCart className="cart_logo" />
-                                        <span>Cart</span>({state.length})
-                                    </button>
-                                </div>
+
                             </div>
                         </div >
                     </Nav>

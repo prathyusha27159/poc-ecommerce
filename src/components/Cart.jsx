@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { addCart, delCart } from "../store/actions/index";
@@ -9,9 +9,9 @@ const Cart = () => {
     const state = useSelector((state) => state.handleCart);
     const dispatch = useDispatch();
 
-    const handleAdd = (item) => {
+    const handleAdd =  useCallback((item) => {
         dispatch(addCart(item));
-    };
+    },[dispatch]);
     const handleDel = (item) => {
         dispatch(delCart(item));
     };
